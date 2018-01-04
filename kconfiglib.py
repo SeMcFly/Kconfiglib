@@ -3409,6 +3409,7 @@ class Symbol(object):
                 # Used to implement the warning below
                 has_default = False
 
+                found = False
                 for val_sym, cond in self.defaults:
                     if expr_value(cond):
                         has_default = self._write_to_conf = True
@@ -3419,9 +3420,9 @@ class Symbol(object):
                             val_num = int(val, base)
                         else:
                             val_num = 0  # strtoll() on empty string
-
-                        break
-                else:
+                        found = True
+                        #break
+                if not found:
                     val_num = 0  # strtoll() on empty string
 
                 # This clamping procedure runs even if there's no default
@@ -3458,7 +3459,7 @@ class Symbol(object):
                     if expr_value(cond):
                         val = val_sym.str_value
                         self._write_to_conf = True
-                        break
+                        #break
 
         # env_var corresponds to SYMBOL_AUTO in the C implementation, and is
         # also set on the defconfig_list symbol there. Test for the
@@ -3514,7 +3515,7 @@ class Symbol(object):
                         val = min(expr_value(default), cond_val)
                         if val:
                             self._write_to_conf = True
-                        break
+                        #break
 
                 # Weak reverse dependencies are only considered if our
                 # direct dependencies are met
